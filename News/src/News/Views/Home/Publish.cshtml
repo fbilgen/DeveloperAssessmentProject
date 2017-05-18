@@ -1,0 +1,85 @@
+﻿@{
+    ViewData["Title"] = "News Articles Publish";
+}
+
+@model List<ArticleViewModel>
+
+
+
+<div class="blog-header">
+    <h2 class="blog-title">Publish.</h2>
+    <p class="lead blog-description">Publish, edit, delete an article</p>
+</div>
+
+<a class="btn btn-warning pull-right" href="/Home/AddArticle" >
+    <i class="fa fa-plus pull-left"> Add Article</i>
+</a>
+@* List of articles in table style *@
+@* For demontration purposes I simply put html table here. Normally I'd use Kendo grid *@
+        <table class="table">
+            <thead>
+                <tr>
+                   
+                    <th> Title </th>
+                    <th> Modified</th>
+                    <th> Editor </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var article in Model)
+                {
+                    <tr>
+                       
+                        <td>@article.Title </td>
+                        <td>@article.EventDate</td>
+                        <td>@article.EditorEmail</td>
+                        <td class="text-nowrap">
+                            <a class="btn btn-link" href="/Home/EditArticle?articleid=@article.ArticleID" name="btnEditArticle">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                            <button class="btn btn-link" name="btnDeleteArticle" id="d_@article.ArticleID" type="submit">
+                                <i class="fa fa-trash-o" aria-hidden="true"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+
+@section Scripts{
+
+<script>
+        $(document).ready(function () {
+
+        });
+
+        //Delete article with ajax
+        $("[name='btnDeleteArticle']").click(function (event) {
+            event.preventDefault();
+            var articleID = ($(this).attr('id')).split('_')[1];
+                $.ajax({
+                    url: '/Home/DeleteArticle',
+                    type: 'POST',
+                    data: { articleID: articleID },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.result) {
+                            //refresh page
+                            window.location.reload();
+                        } else {
+                            alert("error");
+                        }
+                    },
+                    error: onAjaxError
+                });
+        });
+
+        function onAjaxError(xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + " : " + thrownError);
+        }
+
+</script>
+}

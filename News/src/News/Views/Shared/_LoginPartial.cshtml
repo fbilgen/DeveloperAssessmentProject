@@ -1,0 +1,29 @@
+﻿
+@using News.Models
+
+
+@{var sessionName = new Byte[20];
+    bool nameExists = Context.Session.TryGetValue("SessionKeyEmail", out sessionName);
+
+    if (nameExists)
+    {
+       
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="btn-link btn-uName">Hello @System.Text.Encoding.UTF8.GetString(sessionName)!</a>
+                </li>
+                <li>
+                    <a href="/Account/Logoff" class="btn-link btn-uName"> <i class="fa fa-sign-out" aria-hidden="true"></i>Log off</a>
+                </li>
+            </ul>
+      
+    }
+    else
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li><a class="btn-link btn-uName" asp-area="" asp-controller="Account" asp-action="Login"><i class="fa fa-sign-in" aria-hidden="true"></i>Log in</a></li>
+        </ul>
+
+    }
+}
+

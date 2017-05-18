@@ -1,0 +1,88 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="blog-header">
+    <h2 class="blog-title">Statistics.</h2>
+    <p class="lead blog-description">Sample chart visualizing #of likes against each article </p>
+</div>
+
+<div class="col-md-6">
+    <canvas class="barchart" id="articleLikeChart"></canvas>
+</div>
+
+
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            GetChartData();
+        });
+
+
+        //Data structure for chart:
+        ///articleLikeData= [labels: [article_names],
+        ///                  datasets:[label:"",
+        ///                           data:[article_likes],
+        ///                           backgroundcolor:"",
+        ///                           bordercolor:""
+        ///                  ]
+        ///                 ];
+
+
+        var GetChartData = function () {
+            $.ajax({
+                url: '/Home/ArticleLikeChart_Read',
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    chartdata = response.result;
+
+                    //get canvas
+                    var ctx = document.getElementById("articleLikeChart").getContext("2d");
+
+                    //initialize chart on canvas with response from ajax call
+                    var articleChart = new Chart(ctx, {
+                        type: 'bar',
+                        data: chartdata,
+                        options: {
+                            responsive: true,
+                            legend: {
+                                display:false,
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Likes per Article'
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+
+                                    }
+
+                                }]
+
+                            },                       
+                        }
+                    });
+                },
+                error: onAjaxError
+            });
+        };
+
+
+
+       
+
+        function onAjaxError(xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + " : " + thrownError);
+        }
+
+
+    </script>
+}

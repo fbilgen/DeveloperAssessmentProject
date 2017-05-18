@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "News Articles";
+}
+
+@model List<ArticleViewModel>
+
+        <div class="blog-header">
+            <h2 class="blog-title">Articles.</h2>
+            <p class="lead blog-description">Latest news here everyone!</p>
+        </div>
+
+        @* List of articles *@
+        @* For demontration purposes I put html table here. Normally I'd use grid. *@
+
+        @foreach (var article in Model)
+        {
+            <div class="page-header">
+                <h4 class="text-success"> @article.Title</h4>
+                    
+                <h5 class="text-warning">by @article.Author  @article.PublishDate.ToShortDateString() </h5>
+                <p>
+                    @if (article.Text.Length <= 500)
+                    {  @article.Text; }
+                    else
+                    {
+                        @article.Text.Substring(0, 500);
+                    }
+
+                    <a class="btn-link" href="/Home/ArticleDetail?articleID=@article.ArticleID" name="btnArticleDetail">
+                    <i class="fa fa-ellipsis-h fa-lg" aria-hidden="true"></i></a>
+                </p>
+                <footer class="text-primary">
+                    <span class="text-warning">Editor: Editor_Name </span>  &nbsp;
+                    @article.LikeCount <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                    @article.CommentCount <i class="fa fa-comment" aria-hidden="true"></i>
+              
+                </footer>
+            </div>
+
+
+        }
+
+@section Scripts {
+ 
+    <script>
+        $(document).ready(function () {
+
+        });
+
+        //Like article with ajaxified function
+        $("[name='btnLikeArticle']").click(function (event) {
+            event.preventDefault();
+            var articleID = ($(this).attr('id')).split('_')[1];
+                $.ajax({
+                    url: '/Home/LikeArticle',
+                    type: 'POST',
+                    data: { articleID: articleID, userID: 3 },
+                    dataType: 'json',
+                    //contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        if (response.result) {
+                            alert("Article Liked!");
+                        } else {
+                            alert("error");
+                        }
+                    },
+                    error: onAjaxError
+                });
+        });
+
+        function onAjaxError(xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + " : " + thrownError);
+        }
+
+    </script>
+
+}

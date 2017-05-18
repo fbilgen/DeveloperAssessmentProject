@@ -1,0 +1,59 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model ArticleViewModel
+
+<div class="blog-header">
+    @*<h1 class="blog-title">Publish</h1>*@
+    <p class="lead blog-description">Edit an article</p>
+</div>
+<span class="text-danger"> @ViewData["Error"]</span>
+<div class="row">
+    <div class="col-md-12">
+        <form asp-controller="Home" asp-action="EditArticle" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+            <div hidden>
+                <input asp-for="ArticleID" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Title" class="form-control text-uppercase" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Text" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <textarea asp-for="Text" class="form-control" rows="10"></textarea>
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Author" class="form-control" />
+                    <span asp-validation-for="Author" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublishDate" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="PublishDate" class="form-control" />
+                    <span asp-validation-for="PublishDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn btn-warning">Update</button>
+                    <a href="/Home/Publish" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
